@@ -9,7 +9,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
         with:
@@ -40,13 +39,12 @@ jobs:
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 950933358440.dkr.ecr.us-east-1.amazonaws.com
           docker build -t pratikshyap -f deployment-using-github-actions/Dockerfile deployment-using-github-actions/
           docker tag pratikshyap:latest 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
-          docker push 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest         
+          docker push 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
 
   deploy:
     name: Deploy
     needs: build
     runs-on: self-hosted
-
     steps:
       - name: Configure AWS credentials
         run: |
@@ -63,6 +61,11 @@ jobs:
 
       - name: Image scan
         run: trivy image 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest > trivyimagedeploy.txt
+
+      - name: Stop and remove existing container
+        run: |
+          docker stop swiggy-clone || true
+          docker rm swiggy-clone || true
 
       - name: Deploy to container
         run: docker run -d --name swiggy-clone -p 3000:3000 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
