@@ -22,7 +22,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=Swiggy
-            -Dsonar.projectName=swiggy
+            -Dsonar.projectName=Swiggy
             -Dsonar.sources=.
 
       - name: Configure AWS credentials
