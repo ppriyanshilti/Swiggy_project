@@ -54,7 +54,7 @@ jobs:
 
       - name: Authenticate Docker to ECR
         run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 254539707241.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 950933358440.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Docker pull image
         run: docker pull 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
