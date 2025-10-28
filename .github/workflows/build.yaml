@@ -38,3 +38,18 @@ jobs:
           docker build -t pratikshyap -f deployment-using-github-actions/Dockerfile deployment-using-github-actions/
           docker tag pratikshyap:latest 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
           docker push 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Docker pull image
+        run: docker pull 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
+
+      - name: Image scan
+        run: trivy image 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest > trivyimagedeploy.txt
+
+      - name: Deploy to container
+        run: docker run -d --name swiggy-clone -p 3000:3000 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
