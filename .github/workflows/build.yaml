@@ -5,15 +5,16 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -33,7 +34,3 @@ jobs:
 
       - name: Docker build and push to ECR
         run:
-           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 950933358440.dkr.ecr.us-east-1.amazonaws.com
-           docker build -t pratikshyap -f deployment-using-github-actions/Dockerfile deployment-using-github-actions/
-           docker tag pratikshyap:latest 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
-           docker push 950933358440.dkr.ecr.us-east-1.amazonaws.com/pratikshyap:latest
